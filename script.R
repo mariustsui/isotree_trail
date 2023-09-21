@@ -24,8 +24,7 @@ fill.na <- function(x, i=5) { if (is.na(x)[i]) { return(mean(x, na.rm = TRUE)) }
 w <- matrix(1, 3, 3)
 
 smooth_chm <- terra::focal(chm, w, fun = mean, na.rm = TRUE)
-tree_tops <- locate_trees(n_las, lmf(getWS))
-tree_tops <- tree_tops %>% dplyr::filter(Z>18)
+tree_tops <- locate_trees(n_las, lmf(ws = getWS, hmin = 18))
 tree_tops2d <- sf::st_zm(tree_tops)
 plot(smooth_chm, col = col)
 plot(sf::st_geometry(tree_tops), add = TRUE, pch = 3)
@@ -33,9 +32,10 @@ plot(sf::st_geometry(tree_tops), add = TRUE, pch = 3)
 
 tree_silva <- segment_trees(n_las, silva2016(smooth_chm, tree_tops, max_cr_factor = 0.3, exclusion = 0.25, ID="treeID"))
 #plot(tree_silva, color = "treeID") # visualize trees
-crowns_silva <- delineate_crowns(  tree_silva,  type = "convex",  func = .stdmetrics)
-crowns_silva <- st_as_sf(crowns_silva)
-st_write(crowns_silva, "D:\\PROJECT_TREES\\isotree_trail\\crowns_silva.shp", append=FALSE)
+crowns_silva <- delineate_crowns(  tree_silva,  type = "convex",  func = .stdtreemetrics)
+#crowns_silva <- st_as_sf(crowns_silva)
+#st_write(crowns_silva, "D:\\PROJECT_TREES\\isotree_trail\\crowns_silva.shp", append=FALSE)
 
-st_write(tree_tops2d, "D:\\PROJECT_TREES\\isotree_trail\\tree_tops.shp", append=FALSE)
+
+#st_write(tree_tops2d, "D:\\PROJECT_TREES\\isotree_trail\\tree_tops.shp", append=FALSE)
 
