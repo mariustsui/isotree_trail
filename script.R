@@ -6,9 +6,12 @@ library("dplyr")
 remove(list = ls())
 
 col <- height.colors(50)
-ori_las <- readLAS("D:\\PROJECT_TREES\\CL2_BE33_2021_1000_1019.las", filter="-drop_classification 6 7 18")
+ori_las <- readLAS("D:\\PROJECT_TREES\\REQ201107_Lars\\laser\\CL2_BE33_2021_1000_0504.las", filter="-drop_classification 6 7 18")
 
-n_las <- normalize_height(ori_las, knnidw())
+las <- classify_noise(ori_las, sor(15,7))
+las_denoise <- filter_poi(las, Classification != LASNOISE)
+
+n_las <- normalize_height(las_denoise, knnidw())
 
 getWS <- function(x){
   y <- 2.6125 + x^0.665
@@ -28,14 +31,11 @@ tree_tops <- locate_trees(n_las, lmf(ws = getWS, hmin = 18))
 tree_tops2d <- sf::st_zm(tree_tops)
 plot(smooth_chm, col = col)
 plot(sf::st_geometry(tree_tops), add = TRUE, pch = 3)
+tree <- segment_trees(n_las, silva2016(smooth_chm, tree_tops, max_cr_factor = 0.3, exclusion = 0.25, ID="treeID"))
 
+#tree <- segment_trees(n_las, li2012(dt1 = 1.5, dt2 = 2, R = 2, Zu = 30, hmin = 20))
+crowns <- crown_metrics(  tree,  type = "convex",  func = .stdtreemetrics, attribute = "treeID", geom = "convex")
 
-tree_silva <- segment_trees(n_las, silva2016(smooth_chm, tree_tops, max_cr_factor = 0.3, exclusion = 0.25, ID="treeID"))
-#plot(tree_silva, color = "treeID") # visualize trees
-crowns_silva <- delineate_crowns(  tree_silva,  type = "convex",  func = .stdtreemetrics)
-#crowns_silva <- st_as_sf(crowns_silva)
-#st_write(crowns_silva, "D:\\PROJECT_TREES\\isotree_trail\\crowns_silva.shp", append=FALSE)
+st_write(crowns, "D:\\PROJECT_TREES\\isotree_trail\\crowns_0504.shp", append=FALSE)
 
-
-#st_write(tree_tops2d, "D:\\PROJECT_TREES\\isotree_trail\\tree_tops.shp", append=FALSE)
 
