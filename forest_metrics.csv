@@ -1,7 +1,7 @@
-"","Number of Trees","Trees per hectare","Crown area(m2)","Crown Cover"
-"5M",10542,0.01,694711.52,0.67
-"10M",NA,NA,NA,NA
-"15M",NA,NA,NA,NA
-"20M",NA,NA,NA,NA
-"30M",NA,NA,NA,NA
-"40M",NA,NA,NA,NA
+,Number of Trees,Trees per hectare,Crown area(m2),Crown Cover (%)
+5M,1296485,86.24,95150766.98,63.15%
+10M,1131318,75.25,91871605.61,61.11%
+15M,782786,52.07,77255881.14,51.39%
+20M,423379,28.16,51918734.43,34.54%
+30M,46619,3.1,8524920.98,5.67%
+40M,4592,0.31,1063369.73,0.71%
