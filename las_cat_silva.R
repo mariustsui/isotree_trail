@@ -4,16 +4,17 @@ library("raster")
 library("sf")
 library("sp")
 library("dplyr")
+library("rgeos")
 remove(list = ls())
 gc()
 
 # Set the minimum height of a tree to be detected ( in meters )
 
-hmin <- c(5)
+hmin <- 1
 loop_index <- 0
-forest_metrics <- matrix(nrow = 6, ncol=4)
+forest_metrics <- matrix(nrow = 11, ncol=4)
 colnames(forest_metrics) <- c("Number of Trees", "Trees per hectare", "Crown area(m2)", "Crown Cover")
-rownames(forest_metrics) <- c("5M", "10M", "15M", "20M", "30M", "40M")
+rownames(forest_metrics) <- c("1M", "1.5M", "2M", "5M", "10M", "15M", "20M", "25M", "30M", "35M", "40M")
 
 # read all the point cloud (.las) into a lasCatalog
   
@@ -54,52 +55,46 @@ rownames(forest_metrics) <- c("5M", "10M", "15M", "20M", "30M", "40M")
   
   start <- Sys.time()
   print(paste0("Project started at ", start))
-  for (h in hmin){
-    loop_index <- loop_index + 1
-    opt    <- list(automerge = TRUE)   # catalog_apply will merge the outputs into a single object
-    output = NULL
-    output <- catalog_map(las_catg, f_treecrown, hmin = h, .options = opt)
-    
-    single_sf <- dplyr::bind_rows(output)
-    types <- st_geometry_type(single_sf)
-    types_df <- data.frame(types)
-    my_labelled_sf_object <- merge(single_sf, types_df,by.x=0, by.y=0, all.x=TRUE)
-    my_filtered_sf_object <- my_labelled_sf_object[my_labelled_sf_object$types == "POLYGON",]
-    
-    
-    st_write(my_filtered_sf_object, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS",'_',h,'PLUS_SILVA.shp' ), append=FALSE)
-    #st_write(my_filtered_sf_object, paste0("D:\\PROJECT_TREES\\isotree_trail\\ALLCROWNS",'_',h,'PLUS_SILVA.shp' ), append=FALSE)
-    
-    
-    a_ha <- units::set_units(st_area(las_catg), ha)
-    a_m2 <- units::set_units(st_area(las_catg), m^2)
-    tph <- nrow(my_filtered_sf_object) / (as.numeric(a_ha))
-    cc <- sum(my_filtered_sf_object$convhull_area) / (as.numeric(a_m2))
-    forest_metrics[loop_index, 1] <- nrow(my_filtered_sf_object)
-    forest_metrics[loop_index, 2] <- round(tph, 2)
-    forest_metrics[loop_index, 3] <- sum(my_filtered_sf_object$convhull_area)
-    forest_metrics[loop_index, 4] <- round(cc, 2)
-  }
+  
+  loop_index <- loop_index + 1
+  opt    <- list(automerge = TRUE)   # catalog_apply will merge the outputs into a single object
+  output = NULL
+  output <- catalog_map(las_catg, f_treecrown, hmin = hmin, .options = opt)
+  
+  single_sf <- dplyr::bind_rows(output)
+  types <- st_geometry_type(single_sf)
+  types_df <- data.frame(types)
+  my_labelled_sf_object <- merge(single_sf, types_df,by.x=0, by.y=0, all.x=TRUE)
+  my_filtered_sf_object <- my_labelled_sf_object[my_labelled_sf_object$types == "POLYGON",]
+  
+  
+  st_write(my_filtered_sf_object, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS",'_',hmin,'PLUS_SILVA.shp' ), append=FALSE)
+  #st_write(my_filtered_sf_object, paste0("D:\\PROJECT_TREES\\isotree_trail\\ALLCROWNS",'_',hmin,'PLUS_SILVA.shp' ), append=FALSE)
+  
+  
+  a_ha <- units::set_units(st_area(las_catg), ha)
+  a_m2 <- units::set_units(st_area(las_catg), m^2)
+
+
   
   df <- as.data.frame((forest_metrics))
   
-  
-  tree_5 <- my_filtered_sf_object
-  tree_10 <- tree_5[tree_5$Z >= 10,]
-  st_write(tree_10, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS",'_10','PLUS_SILVA.shp' ), append=FALSE)
-  df[2, ] <- c(nrow(tree_10), round(nrow(tree_10)/ as.numeric(a_ha), 2), round(sum(tree_10$convhull_area), 2), round( (sum(tree_10$convhull_area)/as.numeric(a_m2)*100), 2))
-  tree_15 <- tree_5[tree_5$Z >= 15,]
-  st_write(tree_15, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS",'_15','PLUS_SILVA.shp' ), append=FALSE)
-  df[3, ] <- c(nrow(tree_15), round(nrow(tree_15)/ as.numeric(a_ha), 2), round(sum(tree_15$convhull_area), 2), round( (sum(tree_15$convhull_area)/as.numeric(a_m2)*100), 2))
-  tree_20 <- tree_5[tree_5$Z >= 20,]
-  st_write(tree_20, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS",'_20','PLUS_SILVA.shp' ), append=FALSE)
-  df[4, ] <- c(nrow(tree_20), round(nrow(tree_20)/ as.numeric(a_ha), 2), round(sum(tree_20$convhull_area), 2), round( (sum(tree_20$convhull_area)/as.numeric(a_m2)*100), 2))
-  tree_30 <- tree_5[tree_5$Z >= 30,]
-  st_write(tree_30, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS",'_30','PLUS_SILVA.shp' ), append=FALSE)
-  df[5, ] <- c(nrow(tree_30), round(nrow(tree_30)/ as.numeric(a_ha), 2), round(sum(tree_30$convhull_area), 2), round( (sum(tree_30$convhull_area)/as.numeric(a_m2)*100), 2))
-  tree_40 <- tree_5[tree_5$Z >= 40,]
-  st_write(tree_40, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS",'_40','PLUS_SILVA.shp' ), append=FALSE)
-  df[6, ] <- c(nrow(tree_40), round(nrow(tree_40)/ as.numeric(a_ha), 2), round(sum(tree_40$convhull_area), 2), round( (sum(tree_40$convhull_area)/as.numeric(a_m2)*100), 2))
+  h_list <- c(1, 1.5, 2, 5, 10, 15, 20, 25, 30, 35, 40)
+  i <- 1
+  for (h in h_list){
+
+    tree <- my_filtered_sf_object[my_filtered_sf_object$Z>=h,]
+    df[i, ] <- c(nrow(tree), round(nrow(tree)/ as.numeric(a_ha), 2), round(sum(tree$convhull_area), 2), round( (sum(tree$convhull_area)/as.numeric(a_m2)*100), 2))  
+    ttop <- gCentroid( spgeom = methods::as( object = tree, Class = "Spatial" ) , byid = TRUE )
+    
+    st_write(tree, paste0("D:\\PROJECT_TREES\\R_OUTPUT\\CROWNS\\CROWNS",'_',h*10,'CM_PLUS_SILVA.shp' ), append=FALSE)
+    #st_write(tree, paste0("D:\\PROJECT_TREES\\isotree_trail\\CROWNS",'_',h,'PLUS_SILVA.shp' ), append=FALSE)    
+    st_write(st_as_sf(ttop), paste0("D:\\PROJECT_TREES\\R_OUTPUT\\TREETOPS\\TTOPS",'_',h*10,'CM_PLUS_SILVA.shp' ), append=FALSE)
+    #st_write(st_as_sf(ttop), paste0("D:\\PROJECT_TREES\\isotree_trail\\TTOPS",'_',h,'PLUS_SILVA.shp' ), append=FALSE)
+
+    
+    i <- i+1
+  }
   
   write.csv(df, "D:\\PROJECT_TREES\\R_OUTPUT\\FOREST_METRICS.csv")
   #write.csv(df, "D:\\PROJECT_TREES\\isotree_trail\\FOREST_METRICS.csv")
