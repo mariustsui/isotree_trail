@@ -3,21 +3,23 @@
   "version" : "3.1.0",
   "build" : 41833,
   "layers" : [
-    "CIMPATH=bush_density/ttops_150cmplus_silva_tif.json"
+    "CIMPATH=1m_bush_density/ttops_10cm_plus_silva_tif.json"
   ],
   "layerDefinitions" : [
     {
       "type" : "CIMRasterLayer",
-      "name" : "TTOPS_150cmPLUS_SILVA.tif",
-      "uRI" : "CIMPATH=bush_density/ttops_150cmplus_silva_tif.json",
+      "name" : "Bush density at 1M height (TPH)",
+      "uRI" : "CIMPATH=1m_bush_density/ttops_10cm_plus_silva_tif.json",
       "sourceModifiedTime" : {
-        "type" : "TimeInstant"
+        "type" : "TimeInstant",
+        "start" : 978307200000
       },
+      "metadataURI" : "CIMPATH=Metadata/0ee928a56c3d6c91cc501943630760d5.xml",
       "useSourceMetadata" : true,
-      "description" : "TTOPS_150cmPLUS_SILVA.tif",
+      "description" : "TTOPS_10CM_PLUS_SILVA.tif",
       "layerElevation" : {
         "type" : "CIMLayerElevationSurface",
-        "elevationSurfaceLayerURI" : "CIMPATH=Map1/e8e19edcdfc24abc8234ccc9098db7de.json"
+        "elevationSurfaceLayerURI" : "CIMPATH=Map1/418b5fb3234347aab85b9f5c09792858.json"
       },
       "expanded" : true,
       "layerType" : "Operational",
@@ -35,7 +37,7 @@
         "type" : "CIMStandardDataConnection",
         "workspaceConnectionString" : "DATABASE=..\\..\\R_OUTPUT\\BUSHDENSITY",
         "workspaceFactory" : "Raster",
-        "dataset" : "TTOPS_150cmPLUS_SILVA.tif",
+        "dataset" : "TTOPS_10CM_PLUS_SILVA.tif",
         "datasetType" : "esriDTAny"
       },
       "colorizer" : {
@@ -45,8 +47,8 @@
         "classBreaks" : [
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 3.7373888113761353,
-            "label" : "0.001 - 3.737",
+            "upperBound" : 25,
+            "label" : "1 - 25",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
@@ -59,162 +61,92 @@
           },
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 20.921412247148467,
-            "label" : "3.738 - 20.921",
+            "upperBound" : 50,
+            "label" : "26 - 50",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
-                222.80000000000001,
-                220.65000000000001,
-                236.38999999999999,
-                40.710000000000001
+                211.22999999999999,
+                208.97999999999999,
+                230.24000000000001,
+                45.509999999999998
               ]
             }
           },
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 38.105435682920799,
-            "label" : "20.922 - 38.105",
+            "upperBound" : 75,
+            "label" : "51 - 75",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
-                206.59999999999999,
-                204.31,
-                227.78,
-                47.43
+                183.46000000000001,
+                180.96000000000001,
+                215.47999999999999,
+                57.020000000000003
               ]
             }
           },
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 55.289459118693131,
-            "label" : "38.106 - 55.289",
+            "upperBound" : 100,
+            "label" : "76 - 100",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
-                190.40000000000001,
-                187.96000000000001,
-                219.16999999999999,
-                54.140000000000001
+                155.69,
+                152.94,
+                200.72,
+                68.530000000000001
               ]
             }
           },
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 72.473482554465463,
-            "label" : "55.29 - 72.473",
+            "upperBound" : 200,
+            "label" : "101 - 200",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
-                174.19999999999999,
-                171.62,
-                210.56,
-                60.850000000000001
+                127.93000000000001,
+                124.87,
+                185.93000000000001,
+                80.060000000000002
               ]
             }
           },
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 89.657505990237794,
-            "label" : "72.474 - 89.658",
+            "upperBound" : 300,
+            "label" : "201 - 300",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
-                158,
-                155.27000000000001,
-                201.94999999999999,
-                67.569999999999993
-              ]
-            }
-          },
-          {
-            "type" : "CIMRasterClassBreak",
-            "upperBound" : 106.84152942601013,
-            "label" : "89.659 - 106.842",
-            "color" : {
-              "type" : "CIMRGBColor",
-              "values" : [
-                141.80000000000001,
-                138.93000000000001,
-                193.33000000000001,
-                74.280000000000001
-              ]
-            }
-          },
-          {
-            "type" : "CIMRasterClassBreak",
-            "upperBound" : 124.02555286178246,
-            "label" : "106.843 - 124.026",
-            "color" : {
-              "type" : "CIMRGBColor",
-              "values" : [
-                126.09999999999999,
-                121.20999999999999,
-                184.02000000000001,
-                81.719999999999999
-              ]
-            }
-          },
-          {
-            "type" : "CIMRasterClassBreak",
-            "upperBound" : 141.2095762975548,
-            "label" : "124.027 - 141.21",
-            "color" : {
-              "type" : "CIMRGBColor",
-              "values" : [
-                113.28,
-                95.560000000000002,
-                170.61000000000001,
-                93.379999999999995
-              ]
-            }
-          },
-          {
-            "type" : "CIMRasterClassBreak",
-            "upperBound" : 158.39359973332714,
-            "label" : "141.211 - 158.394",
-            "color" : {
-              "type" : "CIMRGBColor",
-              "values" : [
-                100.45999999999999,
-                70.430000000000007,
-                157.96000000000001,
+                105.95999999999999,
+                80.909999999999997,
+                162.96000000000001,
                 100
               ]
             }
           },
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 175.57762316909947,
-            "label" : "158.395 - 175.578",
+            "upperBound" : 400,
+            "label" : "301 - 400",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
-                87.640000000000001,
-                45.950000000000003,
-                146.31,
+                83.980000000000004,
+                38.960000000000001,
+                142.97999999999999,
                 100
               ]
             }
           },
           {
             "type" : "CIMRasterClassBreak",
-            "upperBound" : 192.7616466048718,
-            "label" : "175.579 - 192.762",
-            "color" : {
-              "type" : "CIMRGBColor",
-              "values" : [
-                75.239999999999995,
-                22.73,
-                135.49000000000001,
-                100
-              ]
-            }
-          },
-          {
-            "type" : "CIMRasterClassBreak",
-            "upperBound" : 375.09075927734,
-            "label" : "192.763 - 375.091",
+            "upperBound" : 500,
+            "label" : "401 - 500",
             "color" : {
               "type" : "CIMRGBColor",
               "values" : [
@@ -226,7 +158,7 @@
             }
           }
         ],
-        "classificationMethod" : "StandardDeviation",
+        "classificationMethod" : "Manual",
         "colorRamp" : {
           "type" : "CIMMultipartColorRamp",
           "colorRamps" : [
@@ -352,13 +284,20 @@
       }
     }
   ],
+  "binaryReferences" : [
+    {
+      "type" : "CIMBinaryReference",
+      "uRI" : "CIMPATH=Metadata/0ee928a56c3d6c91cc501943630760d5.xml",
+      "data" : "<?xml version=\"1.0\"?>\r\n<metadata xml:lang=\"en\">\r\n\t<Esri>\r\n\t\t<CreaDate>20231013</CreaDate>\r\n\t\t<CreaTime>18250900</CreaTime>\r\n\t\t<ArcGISFormat>1.0</ArcGISFormat>\r\n\t\t<SyncOnce>TRUE</SyncOnce>\r\n\t</Esri>\r\n</metadata>\r\n"
+    }
+  ],
   "rGBColorProfile" : "sRGB IEC61966-2.1",
   "cMYKColorProfile" : "U.S. Web Coated (SWOP) v2",
   "elevationSurfaceLayerDefinitions" : [
     {
       "type" : "CIMElevationSurfaceLayer",
       "name" : "Ground",
-      "uRI" : "CIMPATH=Map1/e8e19edcdfc24abc8234ccc9098db7de.json",
+      "uRI" : "CIMPATH=Map1/418b5fb3234347aab85b9f5c09792858.json",
       "useSourceMetadata" : true,
       "description" : "Ground",
       "expanded" : true,
