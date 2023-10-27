@@ -7,12 +7,17 @@ library("rgeos")
 remove(list = ls())
 
 col <- height.colors(50)
-ori_las <- readLAS("D:\\PROJECT_TREES\\REQ201107_Lars\\laser\\CL2_BE33_2021_1000_1019.las", filter="-drop_classification 6 7 18 -drop_z_below 0.1")
-
+ori_las <- readLAS("D:\\PROJECT_TREES\\PIRONGIA\\laser\\CL2_BE33_2021_1000_1019.las", filter="-drop_classification 6 7 18")
 las <- classify_noise(ori_las, sor(15,7))
 las_denoise <- filter_poi(las, Classification != LASNOISE)
 
 n_las <- normalize_height(las_denoise, knnidw())
+filtered_las = filter_poi(n_las, Z>=1, Z<=1.5)
+pd = rasterize_density(filtered_las,5)
+plot(pd)
+writeRaster(pd, "D:\\PROJECT_TREES\\isotree_trail\\pt_density_100CM_150CM.tif", overwrite=TRUE)
+
+summary(las)
 
 getWS <- function(x){
   y <- 1.6125 + x^0.665

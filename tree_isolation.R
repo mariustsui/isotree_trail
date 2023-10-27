@@ -18,10 +18,10 @@ rownames(forest_metrics) <- c("1M", "1.5M", "2M", "5M", "10M", "15M", "20M", "25
 
 # read all the point cloud (.las) into a lasCatalog
   
-  las_catg <- readLAScatalog("D:\\PROJECT_TREES\\MAUNGATAUTARI\\laser\\", filter="-drop_classification 6 7 18")
+  #las_catg <- readLAScatalog("D:\\PROJECT_TREES\\MAUNGATAUTARI\\laser\\", filter="-drop_classification 6 7 18")
   
   #las_catg <- readLAScatalog("D:\\PROJECT_TREES\\PIRONGIA\\laser\\", filter="-drop_classification 6 7 18")
-  #las_catg <- readLAScatalog("D:\\PROJECT_TREES\\LAS\\", filter="-drop_classification 6 7 18")
+  las_catg <- readLAScatalog("D:\\PROJECT_TREES\\LAS\\", filter="-drop_classification 6 7 18")
   
   opt_chunk_buffer(las_catg) <- 30
   opt_chunk_size(las_catg)   <- 1000      
